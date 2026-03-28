@@ -33,7 +33,7 @@ public class BasicStrategy {
     public BasicStrategy(String hardTotalsFile, String softTotalsFile, String pairSplittingFile, String surrenderFile) throws IOException {
         List<String> dealerTotals = List.of("2", "3", "4", "5", "6", "7", "8", "9", "10", "11");
 
-        List<String> playerHardTotals = List.of("17","16","15","14","13","12","11","10","9","8");
+        List<String> playerHardTotals = List.of("17","16","15","14","13","12","11","10","9","8","7","6","5","4","3","2","1");
         List<String> playerSoftTotals = List.of("a9","a8","a7","a6","a5","a4","a3","a2");
         List<String> pairSplitting = List.of("a","10","9","8","7","6","5","4", "3", "2");
         List<String> surrender = List.of("16", "15", "14");

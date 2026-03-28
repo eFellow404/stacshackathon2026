@@ -13,7 +13,10 @@ public class Translate {
             index += convertRank(hand.getCard(1).rank());
         } else if (hand.getCards().size() >= 2 && hand.getCard(0).rank() == Rank.ACE) {
             index += convertRank(hand.getCard(0).rank());// soft total
-            index += convertRank(hand.getCard(1).rank());
+            for (Card card : hand.getCards().subList(1, hand.getCards().size())) {
+                total += convertRankInt(card.rank());
+            }
+            index += String.valueOf(total);
         } else { // hard total
             for (Card card : hand.getCards()) {
                 total += convertRankInt(card.rank());
