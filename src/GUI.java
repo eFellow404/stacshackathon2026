@@ -12,6 +12,7 @@ public class GUI {
     private final GUICards guiCards = new GUICards();
     private final BlackJack blackJack = new BlackJack(8);
     private int playerCardCount = 0;
+    private int dealerCardCount = 0;
 
     private CardTray dealerTray;
     private CardTray playerTray;
@@ -93,6 +94,7 @@ public class GUI {
         String chosen = pickCard("Add Dealer Card");
         if (chosen != null) {
             dealerTray.addCard(guiCards.getCard(chosen));
+            dealerCardCount++;
             blackJack.addDealerCard(Translate.translateCard(chosen));
             logPanel.appendLog("⬦ Dealer  ← " + formatCard(chosen));
         }
@@ -147,7 +149,7 @@ public class GUI {
             playerTray.addCard(guiCards.getCard(chosen));
             blackJack.addPlayerCard(Translate.translateCard(chosen));
             playerCardCount++;
-            if (playerCardCount >= 2) {
+            if (playerCardCount >= 2 && dealerCardCount >= 1) {
                 logPanel.appendLog(Translate.convertPlay(blackJack.calculatePlay()));
             }
         }
