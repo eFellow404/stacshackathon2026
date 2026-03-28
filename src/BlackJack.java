@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -7,7 +8,10 @@ public class BlackJack {
     private Hand dealerHand;
     private Hand playerHand;
     private Set<Hand> otherPlayerHands;
+    private BasicStrategy strategy;
+    private int numDecks;
     private int count;
+    private double trueCount;
     private boolean samSmells = true;
 
     public BlackJack(int numOfDecks) {
@@ -28,16 +32,40 @@ public class BlackJack {
         }
     }
 
-    public void setOtherPlayerHands(Set<Hand> otherPlayerHands) {
-        this.otherPlayerHands = otherPlayerHands;
+    public void addDealerCard(Card card) {
+        this.dealerHand.addCard(card);
     }
 
-    public void setDealerHand(Hand dealerHand) {
-        this.dealerHand = dealerHand;
+    public void addPlayerCard(Card card) {
+        this.playerHand.addCard(card);
     }
 
-    public void setPlayerHand(Hand playerHand) {
-        this.playerHand = playerHand;
+    public Play calculatePlay() {
+        String translatedDealerHand = Translate.translateHand(this.dealerHand);
+        String translatedPlayerHand = Translate.translateHand(this.playerHand);
+        Play play;
+
+        if (playerHand.getCards().size() == 2) {
+            if (translatedPlayerHand.matches("[a-zA-Z0-9]\1") && this.strategy.getPairSplittingTotalPlay(translatedDealerHand, translatedPlayerHand) == Play.SPLIT) {
+                play = this.strategy.getPairSplittingTotalPlay(translatedDealerHand, translatedPlayerHand);
+            } else if (translatedPlayerHand.matches("A[0-9]")) {
+                play = this.strategy.getSoftTotalPlay(translatedDealerHand, translatedPlayerHand);
+            } else {
+                if ((translatedPlayerHand.equals("14") || translatedPlayerHand.equals("15") || translatedPlayerHand.equals("16")) && this.strategy.getSurrenderTotalPlay(translatedDealerHand, translatedPlayerHand) == Play.SURRENDER) {
+                    play = Play.SURRENDER;
+                } else {
+                    play = this.strategy.getHardTotalPlay(translatedDealerHand, translatedPlayerHand);
+                }
+            }
+        } else {
+            if (translatedPlayerHand.matches("A[0-9]")) {
+                play = this.strategy.getSoftTotalPlay(translatedDealerHand, translatedPlayerHand);
+            } else {
+                play = this.strategy.getHardTotalPlay(translatedDealerHand, translatedPlayerHand);
+            }
+        }
+
+        return play;
     }
 
     public void updateCount() {
@@ -49,5 +77,7 @@ public class BlackJack {
                 count--;
             }
         }
+
+        this.trueCount = (double) count / this.numDecks;
     }
 }

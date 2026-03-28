@@ -1,7 +1,5 @@
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
-        GUI gui = new GUI();
-        sleep(5000);
-        System.out.println(gui.getDealerCards());
+    public static void main(String[] args){
+            GUI gui = new GUI();
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.Table;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public class BasicStrategy {
@@ -30,7 +31,7 @@ public class BasicStrategy {
 
 
     public BasicStrategy(String hardTotalsFile, String softTotalsFile, String pairSplittingFile, String surrenderFile) throws IOException {
-        List<String> dealerTotals = List.of("2", "3", "4", "5", "6", "7", "8", "9", "10");
+        List<String> dealerTotals = List.of("2", "3", "4", "5", "6", "7", "8", "9", "10", "11");
 
         List<String> playerHardTotals = List.of("17","16","15","14","13","12","11","10","9","8");
         List<String> playerSoftTotals = List.of("a9","a8","a7","a6","a5","a4","a3","a2");

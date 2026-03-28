@@ -9,21 +9,15 @@ public class GUI {
 
     private static final int MAX_PLAYER_CARDS = 5;
 
-    // ── Card data ─────────────────────────────────────────────────────────────
-    private final GUICards          guiCards     = new GUICards();
-    private final ArrayList<String> dealerCards  = new ArrayList<>();
-    private final ArrayList<String> playerCards  = new ArrayList<>();
-    private int                     playerCardCount = 0;
+    private final GUICards guiCards = new GUICards();
+    private final BlackJack blackJack = new BlackJack(8);
+    private int playerCardCount = 0;
 
-    // ── UI components (referenced after build) ────────────────────────────────
-    private CardTray   dealerTray;
-    private CardTray   playerTray;
-    private LogPanel   logPanel;
-    private JFrame     frame;
-
-    // ═════════════════════════════════════════════════════════════════════════
-    //  Bootstrap
-    // ═════════════════════════════════════════════════════════════════════════
+    private CardTray dealerTray;
+    private CardTray playerTray;
+    private LogPanel logPanel;
+    private JFrame frame;
+    public Map<String, String> peopleCards = new HashMap<>();
 
     public GUI(){
         buildFrame();
@@ -99,7 +93,7 @@ public class GUI {
         String chosen = pickCard("Add Dealer Card");
         if (chosen != null) {
             dealerTray.addCard(guiCards.getCard(chosen));
-            dealerCards.add(chosen);
+            blackJack.addDealerCard(Translate.translateCard(chosen));
             logPanel.appendLog("⬦ Dealer  ← " + formatCard(chosen));
         }
     }
@@ -151,7 +145,7 @@ public class GUI {
         String chosen = pickCard("Hit — Draw a Card");
         if (chosen != null) {
             playerTray.addCard(guiCards.getCard(chosen));
-            playerCards.add(chosen);
+            blackJack.addPlayerCard(Translate.translateCard(chosen));
             playerCardCount++;
             if (playerCardCount >= 2) {
                 logPanel.appendLog(Translate.convertPlay(blackJack.calculatePlay()));
