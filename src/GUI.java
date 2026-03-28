@@ -24,10 +24,6 @@ public class GUI {
         buildFrame();
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(GUI::new);
-    }
-
     private void buildFrame() {
         frame = new JFrame("♠  Royal Blackjack  ♠");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
