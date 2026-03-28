@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +28,7 @@ public class BlackJack {
             this.strategy = new BasicStrategy("strats/basicStrategy/HardTotals.csv", "strats/basicStrategy/SoftTotals.csv",
                     "strats/basicStrategy/PairSplitting.csv", "strats/basicStrategy/Surrender.csv");
             this.numDecks = numOfDecks;
+            this.otherPlayerHands = new HashSet<>();
         } catch (IOException e) {
             e.printStackTrace();
         }
