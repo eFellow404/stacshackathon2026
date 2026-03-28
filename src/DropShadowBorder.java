@@ -1,4 +1,3 @@
-
 import javax.swing.border.AbstractBorder;
 import java.awt.Color;
 import java.awt.Component;
@@ -7,17 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 
-/**
- * A soft drop-shadow {@link javax.swing.border.Border} applied to each card
- * label so the cards appear to float above the felt surface.
- *
- * <p>The shadow is built from several semi-transparent filled rounds,
- * growing progressively more opaque toward the outer edge to simulate
- * a diffuse light source from above.
- */
 public class DropShadowBorder extends AbstractBorder {
 
-    /** Pixel depth of the shadow on the right and bottom edges. */
     private static final int SHADOW_SIZE = 4;
 
     @Override

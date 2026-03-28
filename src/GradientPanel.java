@@ -1,25 +1,14 @@
-
-
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-/**
- * A {@link JPanel} that fills itself with a vertical two-colour gradient.
- * Used for the header bar and any other surface that needs a simple gradient
- * background without custom painting code at the call site.
- */
 public class GradientPanel extends JPanel {
 
     private final Color top;
     private final Color bottom;
 
-    /**
-     * @param top    colour at the top edge
-     * @param bottom colour at the bottom edge
-     */
     public GradientPanel(Color top, Color bottom) {
         this.top    = top;
         this.bottom = bottom;

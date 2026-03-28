@@ -1,26 +1,11 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-/**
- * The row of action buttons (HIT, STAND, DOUBLE DOWN, SURRENDER) displayed
- * at the bottom of the player section.
- *
- * <p>Construct with an {@link ActionListener} for each action so the calling
- * code (i.e. {@link GUI}) can wire up game logic without touching button
- * layout concerns.
- */
 public class ActionButtons extends JPanel {
 
-    /**
-     * @param onHit       action fired when the player clicks HIT
-     * @param onStand     action fired when the player clicks STAND
-     * @param onDouble    action fired when the player clicks DOUBLE DOWN
-     * @param onSurrender action fired when the player clicks SURRENDER
-     */
     public ActionButtons(ActionListener onHit,
                          ActionListener onStand,
                          ActionListener onDouble,
@@ -34,15 +19,6 @@ public class ActionButtons extends JPanel {
         add(buildActionButton("SURRENDER",  Theme.BTN_SURRENDER, onSurrender));
     }
 
-    // ── Private builder ───────────────────────────────────────────────────────
-
-    /**
-     * Creates a bold, coloured pill-shaped action button.
-     *
-     * @param text   button label
-     * @param accent base fill colour; brightened on hover, darkened at rest
-     * @param al     click listener
-     */
     private JButton buildActionButton(String text, Color accent, ActionListener al) {
         JButton btn = new JButton(text) {
             private boolean hovered = false;

@@ -1,17 +1,7 @@
-
-
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 
-/**
- * The right-hand chips and balance panel.
- *
- * <p>Displays a decorative stack of coloured chip icons with their
- * denominations and a running balance figure at the bottom.
- * The balance label is exposed via {@link #setBalance(String)} so game
- * logic can update it without coupling to layout details.
- */
 public class ChipsPanel extends JPanel {
 
     private final JLabel balanceLabel;
@@ -37,18 +27,9 @@ public class ChipsPanel extends JPanel {
         add(Box.createVerticalStrut(24));
     }
 
-    // ── Public API ────────────────────────────────────────────────────────────
-
-    /**
-     * Updates the balance figure displayed at the bottom of the panel.
-     *
-     * @param formatted already-formatted string, e.g. {@code "$3,750"}
-     */
     public void setBalance(String formatted) {
         balanceLabel.setText(formatted);
     }
-
-    // ── Private builders ──────────────────────────────────────────────────────
 
     private JLabel buildSectionLabel() {
         JLabel lbl = new JLabel("C H I P S", SwingConstants.CENTER);
@@ -97,11 +78,6 @@ public class ChipsPanel extends JPanel {
         return row;
     }
 
-    // ── Inner chip icon ───────────────────────────────────────────────────────
-
-    /**
-     * A small self-painting circular chip icon with a denomination label.
-     */
     private static class ChipIcon extends JPanel {
 
         private final int   amount;

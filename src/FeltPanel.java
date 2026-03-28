@@ -1,5 +1,3 @@
-
-
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import java.awt.GradientPaint;
@@ -7,10 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
 
-/**
- * A {@link JPanel} that paints itself with a diagonal felt-like gradient and
- * a subtle dot-pattern texture.  Used for the dealer and player table sections.
- */
 public class FeltPanel extends JPanel {
 
     public FeltPanel() {

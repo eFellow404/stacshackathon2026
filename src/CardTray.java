@@ -5,28 +5,16 @@ import java.awt.*;
 
 public class CardTray extends JPanel {
 
-    /** Minimum visible height keeps the tray from collapsing when empty. */
     private static final int MIN_HEIGHT_PAD = 28;
 
     private final boolean greenGlow;
 
-    /**
-     * @param greenGlow {@code true} for the player tray (green accent),
-     *                  {@code false} for the dealer tray (gold accent)
-     */
     public CardTray(boolean greenGlow) {
         super(new FlowLayout(FlowLayout.CENTER, 12, 10));
         this.greenGlow = greenGlow;
         setOpaque(false);
     }
 
-    // ── Public API ────────────────────────────────────────────────────────────
-
-    /**
-     * Appends a card image to the tray, wrapped in a drop-shadow border.
-     *
-     * @param cardImage rendered card {@link Image} from {@code blackjack.GUICards}
-     */
     public void addCard(Image cardImage) {
         JLabel label = new JLabel(new ImageIcon(cardImage));
         label.setBorder(BorderFactory.createCompoundBorder(
@@ -36,8 +24,6 @@ public class CardTray extends JPanel {
         revalidate();
         repaint();
     }
-
-    // ── Painting ──────────────────────────────────────────────────────────────
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -70,14 +56,6 @@ public class CardTray extends JPanel {
         return d;
     }
 
-    // ── Factory / scroll wrapper ──────────────────────────────────────────────
-
-    /**
-     * Wraps this tray in a {@link JScrollPane} configured for horizontal-only
-     * scrolling with a transparent viewport (matching the felt background).
-     *
-     * @return a scroll pane ready to drop into a {@link BorderLayout} centre slot
-     */
     public JScrollPane inScrollPane() {
         JScrollPane sp = new JScrollPane(this,
                 JScrollPane.VERTICAL_SCROLLBAR_NEVER,

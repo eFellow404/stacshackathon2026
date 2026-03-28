@@ -1,27 +1,12 @@
-
-
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * Main entry point for the Royal Blackjack application.
- *
- * <p>This class is responsible solely for assembling the top-level
- * {@link JFrame} and wiring together the specialist panel components.
- * All visual constants live in {@link Theme}; all panel construction
- * is delegated to dedicated classes in this package.
- *
- * <p>To launch the application:
- * <pre>{@code
- *   SwingUtilities.invokeLater(GUI::new);
- * }</pre>
- */
 public class GUI {
 
-    // ── Configuration ─────────────────────────────────────────────────────────
-    /** Maximum cards the player may hold before the tray locks. */
     private static final int MAX_PLAYER_CARDS = 5;
 
     // ── Card data ─────────────────────────────────────────────────────────────
@@ -40,17 +25,13 @@ public class GUI {
     //  Bootstrap
     // ═════════════════════════════════════════════════════════════════════════
 
-    public GUI() {
+    public GUI(){
         buildFrame();
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(GUI::new);
     }
-
-    // ═════════════════════════════════════════════════════════════════════════
-    //  Frame assembly
-    // ═════════════════════════════════════════════════════════════════════════
 
     private void buildFrame() {
         frame = new JFrame("♠  Royal Blackjack  ♠");
@@ -66,8 +47,6 @@ public class GUI {
 
         frame.setVisible(true);
     }
-
-    // ─── Golden header bar ───────────────────────────────────────────────────
 
     private JPanel buildHeader() {
         JPanel header = new GradientPanel(Theme.PANEL_BG, new Color(0x0D2010));
@@ -85,7 +64,6 @@ public class GUI {
         return header;
     }
 
-    // ─── Vertical split between dealer (top) and player (bottom) ────────────
 
     private JSplitPane buildSplitPane(Dimension screen) {
         JSplitPane split = new JSplitPane(
@@ -100,10 +78,6 @@ public class GUI {
         split.setBackground(Theme.FELT_DARK);
         return split;
     }
-
-    // ═════════════════════════════════════════════════════════════════════════
-    //  Dealer section (top half)
-    // ═════════════════════════════════════════════════════════════════════════
 
     private JPanel buildDealerSection() {
         JPanel panel = new FeltPanel();
@@ -129,10 +103,6 @@ public class GUI {
             logPanel.appendLog("⬦ Dealer  ← " + formatCard(chosen));
         }
     }
-
-    // ═════════════════════════════════════════════════════════════════════════
-    //  Player section (bottom half)
-    // ═════════════════════════════════════════════════════════════════════════
 
     private JPanel buildPlayerSection(Dimension screen) {
         logPanel = new LogPanel();
@@ -183,14 +153,13 @@ public class GUI {
             playerTray.addCard(guiCards.getCard(chosen));
             playerCards.add(chosen);
             playerCardCount++;
-            logPanel.appendLog("⬧ Player  ← " + formatCard(chosen)
-                    + "  [" + playerCardCount + "/" + MAX_PLAYER_CARDS + "]");
+            if (playerCardCount >= 2) {
+                logPanel.appendLog(Translate.convertPlay(blackJack.calculatePlay()));
+            }
         }
-    }
 
-    // ═════════════════════════════════════════════════════════════════════════
-    //  Card picker dialog
-    // ═════════════════════════════════════════════════════════════════════════
+
+    }
 
     private String pickCard(String title) {
         ArrayList<String> names = new ArrayList<>(guiCards.getCardMap().keySet());
@@ -211,20 +180,6 @@ public class GUI {
                 names.get(0));
     }
 
-    // ═════════════════════════════════════════════════════════════════════════
-    //  Public accessors (for game-logic layer)
-    // ═════════════════════════════════════════════════════════════════════════
-
-    /** @return defensive copy of the player's current hand */
-    public ArrayList<String> getPlayerCards() { return new ArrayList<>(playerCards); }
-
-    /** @return defensive copy of the dealer's current hand */
-    public ArrayList<String> getDealerCards()  { return new ArrayList<>(dealerCards); }
-
-    // ═════════════════════════════════════════════════════════════════════════
-    //  Small utility helpers
-    // ═════════════════════════════════════════════════════════════════════════
-
     private JLabel sectionLabel(String text) {
         JLabel lbl = new JLabel(text, SwingConstants.CENTER);
         lbl.setFont(Theme.serif(11f).deriveFont(Font.BOLD | Font.ITALIC));
@@ -233,7 +188,6 @@ public class GUI {
         return lbl;
     }
 
-    /** Wraps a component in a transparent, centred flow panel with given insets. */
     private JPanel centreRow(JComponent inner, int top, int left, int bottom, int right) {
         JPanel row = new JPanel(new FlowLayout(FlowLayout.CENTER));
         row.setOpaque(false);
@@ -246,7 +200,6 @@ public class GUI {
         return raw.replace("_", " ");
     }
 
-    // ─── Ghost button (slim gold outline style) ──────────────────────────────
 
     private JButton buildGhostButton(String text) {
         JButton btn = new JButton(text) {

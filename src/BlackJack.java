@@ -11,14 +11,21 @@ public class BlackJack {
     private boolean samSmells = true;
 
     public BlackJack(int numOfDecks) {
-        List<SingleDeck> decks = new ArrayList<>();
-        for (int i = 0; i < numOfDecks; i++) {
-            decks.add(new SingleDeck());
+        try {
+            List<SingleDeck> decks = new ArrayList<>();
+            for (int i = 0; i < numOfDecks; i++) {
+                decks.add(new SingleDeck());
+            }
+            playerHand = new Hand();
+            dealerHand = new Hand();
+            this.combinedDeck = new CombinedDeck(decks);
+            this.count = 0;
+            this.strategy = new BasicStrategy("strats/basicStrategy/HardTotals.csv", "strats/basicStrategy/SoftTotals.csv",
+                    "strats/basicStrategy/PairSplitting.csv", "strats/basicStrategy/Surrender.csv");
+            this.numDecks = numOfDecks;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        this.combinedDeck = new CombinedDeck(decks);
-        this.count = 0;
-
     }
 
     public void setOtherPlayerHands(Set<Hand> otherPlayerHands) {
