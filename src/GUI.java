@@ -97,6 +97,11 @@ public class GUI {
             if (playerCardCount >= 2 && dealerCardCount >= 1) {
                 logPanel.appendLog(Translate.convertPlay(blackJack.calculatePlay()));
             }
+
+            if (playerCardCount == 2 && dealerCardCount == 1) {
+                logPanel.appendLog("The true count is: " + blackJack.getTrueCount());
+                logPanel.appendLog("The optimal bet is: " + blackJack.calculateOptimalBet());
+            }
         }
     }
 
@@ -149,8 +154,14 @@ public class GUI {
             playerTray.addCard(guiCards.getCard(chosen));
             blackJack.addPlayerCard(Translate.translateCard(chosen));
             playerCardCount++;
+            
             if (playerCardCount >= 2 && dealerCardCount >= 1) {
                 logPanel.appendLog(Translate.convertPlay(blackJack.calculatePlay()));
+            }
+
+            if (playerCardCount == 2 && dealerCardCount == 1) {
+                logPanel.appendLog("The true count is: " + blackJack.getTrueCount());
+                logPanel.appendLog("The optimal bet is: " + blackJack.calculateOptimalBet());
             }
         }
     }

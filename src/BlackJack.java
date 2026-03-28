@@ -34,10 +34,12 @@ public class BlackJack {
 
     public void addDealerCard(Card card) {
         this.dealerHand.addCard(card);
+        this.updateCount();
     }
 
     public void addPlayerCard(Card card) {
         this.playerHand.addCard(card);
+        this.updateCount();
     }
 
     public Play calculatePlay() {
@@ -66,6 +68,14 @@ public class BlackJack {
         }
 
         return play;
+    }
+
+    public double calculateOptimalBet() {
+        return (this.trueCount * 0.005) - 0.005;
+    }
+
+    public double getTrueCount() {
+        return this.trueCount;
     }
 
     public void updateCount() {
