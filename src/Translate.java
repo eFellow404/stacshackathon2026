@@ -8,10 +8,10 @@ public class Translate {
         int total = 0;
         String index = "";
         // pair split
-        if (hand.getCards().size() == 2 && hand.getCard(0) == hand.getCard(1) && hand.getCard(0).rank() == Rank.ACE) {
+        if (hand.getCards().size() >= 2 && hand.getCard(0) == hand.getCard(1) && hand.getCard(0).rank() == Rank.ACE) {
             index += "a";
             index += convertRank(hand.getCard(1).rank());
-        } else if (hand.getCards().size() == 2 && hand.getCard(0).rank() == Rank.ACE) {
+        } else if (hand.getCards().size() >= 2 && hand.getCard(0).rank() == Rank.ACE) {
             index += convertRank(hand.getCard(0).rank());// soft total
             index += convertRank(hand.getCard(1).rank());
         } else { // hard total
