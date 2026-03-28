@@ -410,7 +410,7 @@ public class GUI extends JFrame {
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  DIALOGS
+    //  DIALOGS///////.
     // ═════════════════════════════════════════════════════════════════════════
     private void showCardPickerDialog(JFrame parent) {
         String chosen = pickCard(parent, "Add Dealer Card");
