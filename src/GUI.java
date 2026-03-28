@@ -97,6 +97,10 @@ public class GUI {
             dealerCardCount++;
             blackJack.addDealerCard(Translate.translateCard(chosen));
             logPanel.appendLog("⬦ Dealer  ← " + formatCard(chosen));
+
+            if (playerCardCount >= 2 && dealerCardCount >= 1) {
+                logPanel.appendLog(Translate.convertPlay(blackJack.calculatePlay()));
+            }
         }
     }
 
@@ -153,8 +157,6 @@ public class GUI {
                 logPanel.appendLog(Translate.convertPlay(blackJack.calculatePlay()));
             }
         }
-
-
     }
 
     private String pickCard(String title) {

@@ -56,7 +56,7 @@ public class BasicStrategy {
                 for (int i = 0; i < values.length; i++) {
                     String dealerTotal = dealerTotals.get(i);
                     Play play = convertValueToPlay(values[i]);
-                    strategyTable.put(playerTotal, dealerTotal, play);
+                    strategyTable.put(dealerTotal, playerTotal, play);
                 }
 
                 lineNumber++;
