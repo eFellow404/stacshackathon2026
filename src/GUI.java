@@ -13,10 +13,11 @@ public class GUI {
     private final BlackJack blackJack = new BlackJack(8);
     private int playerCardCount = 0;
     private int dealerCardCount = 0;
-
     private CardTray dealerTray;
     private CardTray playerTray;
+    private double balance;
     private LogPanel logPanel;
+    private ChipsPanel chipsPanel;
     private JFrame frame;
     public Map<String, String> peopleCards = new HashMap<>();
 
@@ -45,7 +46,7 @@ public class GUI {
         header.setLayout(new BorderLayout());
 
         JLabel title = new JLabel(
-                "♠  R O Y A L   B L A C K J A C K  ♣",
+                "♠  B L A C K J A C K  ♣",
                 SwingConstants.CENTER);
         title.setFont(Theme.serif(22f).deriveFont(Font.BOLD));
         title.setForeground(Theme.GOLD);
@@ -101,6 +102,7 @@ public class GUI {
     private void handleAddDealerCard() {
         String chosen = pickCard("Add Dealer Card");
         if (chosen != null) {
+            balance = chipsPanel.getBalance();
             dealerTray.addCard(guiCards.getCard(chosen));
             dealerCardCount++;
             blackJack.addDealerCard(Translate.translateCard(chosen));
@@ -112,14 +114,18 @@ public class GUI {
 
             if (playerCardCount == 2 && dealerCardCount == 1) {
                 logPanel.appendLog("The true count is: " + blackJack.getTrueCount());
-                logPanel.appendLog("The optimal bet is: " + blackJack.calculateOptimalBet());
+                if (blackJack.calculateOptimalBet() * balance > 5) {
+                    logPanel.appendLog("The optimal bet is: $" + blackJack.calculateOptimalBet() * balance);
+                } else {
+                    logPanel.appendLog("Bet the $5 minimum");
+                }
             }
         }
     }
 
     private JPanel buildPlayerSection(Dimension screen) {
         logPanel = new LogPanel();
-        ChipsPanel chipsPanel = new ChipsPanel();
+        chipsPanel = new ChipsPanel();
 
         JPanel centre = buildPlayerCentre();
 
@@ -163,6 +169,7 @@ public class GUI {
         }
         String chosen = pickCard("Hit — Draw a Card");
         if (chosen != null) {
+            balance = chipsPanel.getBalance();
             playerTray.addCard(guiCards.getCard(chosen));
             blackJack.addPlayerCard(Translate.translateCard(chosen));
             playerCardCount++;
@@ -173,7 +180,11 @@ public class GUI {
 
             if (playerCardCount == 2 && dealerCardCount == 1) {
                 logPanel.appendLog("The true count is: " + blackJack.getTrueCount());
-                logPanel.appendLog("The optimal bet is: " + blackJack.calculateOptimalBet());
+                if (blackJack.calculateOptimalBet() * balance > 5) {
+                    logPanel.appendLog("The optimal bet is: $" + blackJack.calculateOptimalBet() * balance);
+                } else {
+                    logPanel.appendLog("Bet the $5 minimum");
+                }
             }
         }
     }

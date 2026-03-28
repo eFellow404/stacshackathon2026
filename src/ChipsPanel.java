@@ -3,14 +3,13 @@ import javax.swing.border.MatteBorder;
 import java.awt.*;
 
 public class ChipsPanel extends JPanel {
-
-    private final JLabel balanceLabel;
+    JTextField epstien;
 
     public ChipsPanel() {
         super();
         setBackground(Theme.PANEL_BG);
         setBorder(new MatteBorder(0, 1, 0, 0, Theme.GOLD_DIM));
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new FlowLayout());
 
         add(Box.createVerticalStrut(20));
         add(buildSectionLabel());
@@ -18,17 +17,17 @@ public class ChipsPanel extends JPanel {
         addChipRows();
         add(Box.createVerticalGlue());
 
-        JLabel balCaption = buildCaption("BALANCE");
+        JLabel balCaption = buildCaption("BALANCE: $");
         add(balCaption);
 
-        balanceLabel = buildBalanceLabel("$2,500");
-        add(balanceLabel);
+        epstien = new JTextField("2500");
+        add(epstien);
 
         add(Box.createVerticalStrut(24));
     }
 
-    public void setBalance(String formatted) {
-        balanceLabel.setText(formatted);
+    public double getBalance() {
+        return Double.parseDouble(epstien.getText());
     }
 
     private JLabel buildSectionLabel() {
