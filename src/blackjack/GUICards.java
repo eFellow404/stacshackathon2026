@@ -1,3 +1,5 @@
+package blackjack;
+
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ public class GUICards {
     public static final int CARD_HEIGHT = d.height / 8;
 
     // Path to your assets folder — adjust if your working directory differs
-    private static final String ASSETS_PATH = "../assets/";
+    private static final String ASSETS_PATH = "assets/";
 
     private ArrayList<Image> cardImages = new ArrayList<>();
 
@@ -48,7 +50,12 @@ public class GUICards {
         System.out.println("Loaded " + cardImages.size() + " card images.");
     }
 
+    // With this:
     private Image loadAndScale(String path) {
+        File f = new File(path);
+        if (!f.exists()) {
+            System.err.println("Missing asset: " + f.getAbsolutePath());
+        }
         Image img = Toolkit.getDefaultToolkit().getImage(path);
         return img.getScaledInstance(CARD_WIDTH, CARD_HEIGHT, Image.SCALE_SMOOTH);
     }

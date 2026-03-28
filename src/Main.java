@@ -1,4 +1,4 @@
-import static java.lang.Thread.sleep;
+import blackjack.*;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
