@@ -58,7 +58,7 @@ public class BlackJack {
                 }
             }
         } else {
-            if (translatedPlayerHand.matches("A[0-9]")) {
+            if (translatedPlayerHand.matches("a[0-9]")) {
                 play = this.strategy.getSoftTotalPlay(translatedDealerHand, translatedPlayerHand);
             } else {
                 play = this.strategy.getHardTotalPlay(translatedDealerHand, translatedPlayerHand);
