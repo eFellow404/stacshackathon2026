@@ -83,7 +83,19 @@ public class GUI {
         addBtn.addActionListener(e -> handleAddDealerCard());
         panel.add(centreRow(addBtn, 0, 0, 12, 0), BorderLayout.SOUTH);
 
+        JButton addBtn2 = buildGhostButton("Next Hand");
+        addBtn2.addActionListener(e -> handleNextHand());
+        panel.add(centreRow(addBtn2, 0, 0, 12, 0), BorderLayout.NORTH);
+
         return panel;
+    }
+
+    private void handleNextHand() {
+        playerTray.removeCards();
+        dealerTray.removeCards();
+        playerCardCount = 0;
+        dealerCardCount = 0;
+        blackJack.reset();
     }
 
     private void handleAddDealerCard() {

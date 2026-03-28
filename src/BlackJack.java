@@ -44,6 +44,17 @@ public class BlackJack {
         this.updateCount();
     }
 
+    public void reset() {
+        List<SingleDeck> decks = new ArrayList<>();
+        for (int i = 0; i < numDecks; i++) {
+            decks.add(new SingleDeck());
+        }
+        this.playerHand = new Hand();
+        this.dealerHand = new Hand();
+        this.otherPlayerHands = new HashSet<>();
+        this.combinedDeck = new CombinedDeck(decks);
+    }
+
     public Play calculatePlay() {
         String translatedDealerHand = Translate.translateHand(this.dealerHand);
         String translatedPlayerHand = Translate.translateHand(this.playerHand);
