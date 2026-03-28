@@ -11,19 +11,34 @@ public class Translate {
         if (hand.getCards().size() == 2 && hand.getCard(0) == hand.getCard(1) && hand.getCard(0).rank() == Rank.ACE) {
             index += "a";
             index += convertRank(hand.getCard(1).rank());
-        } else if (hand.getCards().size() == 2 && hand.getCard(0).rank() == Rank.ACE) { // soft total
+        } else if (hand.getCards().size() == 2 && hand.getCard(0).rank() == Rank.ACE) {
+            index += convertRank(hand.getCard(0).rank());// soft total
             index += convertRank(hand.getCard(1).rank());
-            index += convertRank(hand.getCard(0).rank());
         } else { // hard total
             for (Card card : hand.getCards()) {
-                total += convertRank(card.rank());
+                total += convertRankInt(card.rank());
             }
             index = String.valueOf(total);
         }
         return index;
     }
 
-    private static int convertRank(Rank rank) {
+    private static String convertRank(Rank rank) {
+        return switch (rank) {
+            case ACE -> "a";
+            case TWO -> "2";
+            case THREE -> "3";
+            case FOUR -> "4";
+            case FIVE -> "5";
+            case SIX -> "6";
+            case SEVEN -> "7";
+            case EIGHT -> "8";
+            case NINE -> "9";
+            case TEN, QUEEN, KING, JACK -> "10";
+        };
+    }
+
+    private static int convertRankInt(Rank rank) {
         return switch (rank) {
           case ACE -> 11;
           case TWO -> 2;

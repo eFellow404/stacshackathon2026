@@ -48,7 +48,7 @@ public class BlackJack {
         if (playerHand.getCards().size() == 2) {
             if (translatedPlayerHand.matches("[a-zA-Z0-9]\1") && this.strategy.getPairSplittingTotalPlay(translatedDealerHand, translatedPlayerHand) == Play.SPLIT) {
                 play = this.strategy.getPairSplittingTotalPlay(translatedDealerHand, translatedPlayerHand);
-            } else if (translatedPlayerHand.matches("A[0-9]")) {
+            } else if (translatedPlayerHand.matches("a[0-9]")) {
                 play = this.strategy.getSoftTotalPlay(translatedDealerHand, translatedPlayerHand);
             } else {
                 if ((translatedPlayerHand.equals("14") || translatedPlayerHand.equals("15") || translatedPlayerHand.equals("16")) && this.strategy.getSurrenderTotalPlay(translatedDealerHand, translatedPlayerHand) == Play.SURRENDER) {
