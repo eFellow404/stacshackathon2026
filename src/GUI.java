@@ -11,20 +11,14 @@ public class GUI {
     
     private int playerCardCount = 0;
     private int dealerCardCount = 0;
-    private Map<String, Integer> otherPlayerCardCount = new LinkedHashMap<>();
     
     private CardTray dealerTray;
     private CardTray playerTray;
-    private Map<String, CardTray> otherPlayerTrays = new LinkedHashMap<>();
     
     private double balance;
     private LogPanel logPanel;
     private ChipsPanel chipsPanel;
-    private DefaultListModel<String> playersModel;
-    private JList<String> playersList;
-    private JPanel otherPlayersPanel;
     private JFrame frame;
-    public Map<String, String> peopleCards = new HashMap<>();
 
     public GUI(){
         buildFrame();
@@ -73,109 +67,6 @@ public class GUI {
         split.setBorder(null);
         split.setBackground(Theme.FELT_DARK);
         return split;
-    }
-
-    private JPanel buildOtherPlayersPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setOpaque(false);
-
-        // Top: label + Add Player button
-        JPanel top = new JPanel(new BorderLayout());
-        top.setOpaque(false);
-        JLabel lbl = new JLabel("Other Players", SwingConstants.CENTER);
-        lbl.setFont(Theme.serif(12f));
-        lbl.setForeground(Theme.GOLD_DIM);
-        top.add(lbl, BorderLayout.CENTER);
-
-        JButton addPlayerBtn = buildGhostButton("+ Add Player");
-        addPlayerBtn.addActionListener(e -> handleAddPlayer());
-        top.add(centreRow(addPlayerBtn, 0, 6, 0, 6), BorderLayout.EAST);
-
-        panel.add(top, BorderLayout.NORTH);
-
-        // Middle: list of player names (select to add cards)
-        playersModel = new DefaultListModel<>();
-        playersList = new JList<>(playersModel);
-        playersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        playersList.setOpaque(false);
-        playersList.setBackground(Theme.FELT_DARK);
-        playersList.setForeground(Theme.TEXT_CREAM);
-
-        JScrollPane listScroll = new JScrollPane(playersList);
-        listScroll.setBorder(null);
-        listScroll.setOpaque(false);
-        listScroll.getViewport().setOpaque(false);
-        listScroll.setPreferredSize(new Dimension(160, 120));
-        panel.add(listScroll, BorderLayout.CENTER);
-
-        // Bottom: Add Card to Selected (optional)
-        JButton addCardBtn = buildGhostButton("+ Add Card to Selected");
-        addCardBtn.addActionListener(e -> handleAddCardToSelectedPlayer());
-        panel.add(centreRow(addCardBtn, 4, 4, 8, 4), BorderLayout.SOUTH);
-
-        return panel;
-    }
-
-    private void handleAddPlayer() {
-        String name = JOptionPane.showInputDialog(frame, "Player name:", "Add Player", JOptionPane.PLAIN_MESSAGE);
-        if (name == null) return;
-        name = name.trim();
-        if (name.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Name cannot be empty", "Invalid", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if (otherPlayerTrays.containsKey(name) || "Dealer".equalsIgnoreCase(name) || "Player".equalsIgnoreCase(name)) {
-            JOptionPane.showMessageDialog(frame, "A player with that name already exists.", "Duplicate", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Add to list model so the JList shows it
-        playersModel.addElement(name);
-
-        // Create a CardTray to visually show cards for this player
-        CardTray tray = new CardTray(true);
-        tray.setPreferredSize(new Dimension(0, GUICards.CARD_HEIGHT + 40));
-        otherPlayerTrays.put(name, tray);
-        otherPlayerCardCount.put(name, 0);
-
-        // Make a small titled panel for the player: name + tray
-        JPanel single = new JPanel(new BorderLayout());
-        single.setOpaque(false);
-        JLabel nameLbl = new JLabel(name, SwingConstants.CENTER);
-        nameLbl.setForeground(Theme.GOLD_DIM);
-        single.add(nameLbl, BorderLayout.NORTH);
-        single.add(tray.inScrollPane(), BorderLayout.CENTER);
-        single.setBorder(BorderFactory.createEmptyBorder(6, 0, 6, 0));
-
-        // Ensure otherPlayersPanel is created in buildPlayerCentre (see next step)
-        otherPlayersPanel.add(single);
-        otherPlayersPanel.revalidate();
-        otherPlayersPanel.repaint();
-    }
-
-    private void handleAddCardToSelectedPlayer() {
-        String selected = playersList.getSelectedValue();
-        if (selected == null) {
-            JOptionPane.showMessageDialog(frame, "Select a player first.", "No player selected", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        String chosen = pickCard("Add Card — " + selected);
-        if (chosen == null) return;
-
-        CardTray tray = otherPlayerTrays.get(selected);
-        if (tray == null) return;
-
-        // Add the image to the tray and update counts
-        tray.addCard(guiCards.getCard(chosen));
-        otherPlayerCardCount.put(selected, otherPlayerCardCount.getOrDefault(selected, 0) + 1);
-
-        // Update backend model — the BlackJack method you added
-        // Translate.translateCard(chosen) returns a Card instance from the string name
-        blackJack.addOtherPlayerCard(selected, Translate.translateCard(chosen));
-
-        logPanel.appendLog("⬦ " + selected + "  ← " + chosen.replace("_", " "));
-        printLogs();
     }
 
     private JPanel buildDealerSection() {
@@ -305,7 +196,7 @@ public class GUI {
                 "Select a card:", title,
                 JOptionPane.PLAIN_MESSAGE, null,
                 names.toArray(new String[0]),
-                names.get(0));
+                names.getFirst());
     }
 
     private JLabel sectionLabel(String text) {
