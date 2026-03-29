@@ -1,14 +1,11 @@
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class BlackJack {
     private CombinedDeck combinedDeck;
     private Hand dealerHand;
     private Hand playerHand;
-    private Set<Hand> otherPlayerHands;
+    private Map<String, Hand> otherPlayerHands;
     private BasicStrategy strategy;
     private int numDecks;
     private int count;
@@ -28,7 +25,7 @@ public class BlackJack {
             this.strategy = new BasicStrategy("strats/basicStrategy/HardTotals.csv", "strats/basicStrategy/SoftTotals.csv",
                     "strats/basicStrategy/PairSplitting.csv", "strats/basicStrategy/Surrender.csv");
             this.numDecks = numOfDecks;
-            this.otherPlayerHands = new HashSet<>();
+            this.otherPlayerHands = new LinkedHashMap<>();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,6 +41,13 @@ public class BlackJack {
         this.updateCount();
     }
 
+    public void addOtherPlayerCard(String playerName, Card card) {
+        Hand hand = this.otherPlayerHands.getOrDefault(playerName, new Hand());
+        hand.addCard(card);
+        this.otherPlayerHands.put(playerName, hand);
+        this.updateCount();
+    }
+
     public void reset() {
         List<SingleDeck> decks = new ArrayList<>();
         for (int i = 0; i < numDecks; i++) {
@@ -51,7 +55,7 @@ public class BlackJack {
         }
         this.playerHand = new Hand();
         this.dealerHand = new Hand();
-        this.otherPlayerHands = new HashSet<>();
+        this.otherPlayerHands = new LinkedHashMap<>();
         this.combinedDeck = new CombinedDeck(decks);
     }
 

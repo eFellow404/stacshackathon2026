@@ -2,17 +2,28 @@
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class CardTray extends JPanel {
 
     private static final int MIN_HEIGHT_PAD = 28;
 
     private final boolean greenGlow;
+    // Keep an ordered list of labels to preserve insertion order and control z-ordering
+    private final java.util.List<JLabel> cardLabels = new java.util.ArrayList<>();
 
     public CardTray(boolean greenGlow) {
-        super(new FlowLayout(FlowLayout.CENTER, 12, 10));
+        // Use absolute positioning so card JLabels can overlap like a real deck
+        super(null);
         this.greenGlow = greenGlow;
         setOpaque(false);
+        // Re-layout when this panel is resized so the stack remains centered
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                layoutCards();
+            }
+        });
     }
 
     public void addCard(Image cardImage) {
@@ -20,13 +31,25 @@ public class CardTray extends JPanel {
         label.setBorder(BorderFactory.createCompoundBorder(
                 new DropShadowBorder(),
                 BorderFactory.createEmptyBorder(0, 0, 0, 0)));
+
+        // Ensure label has fixed size (card size) so we can position it absolutely
+        label.setSize(GUICards.CARD_WIDTH, GUICards.CARD_HEIGHT);
         add(label);
-        revalidate();
-        repaint();
+        cardLabels.add(label);
+
+        // Recompute positions for all cards so they overlap compactly
+        layoutCards();
     }
 
     public void removeCards() {
-        removeAll();
+        // remove Swing components and clear our bookkeeping list
+        for (JLabel l : cardLabels) {
+            remove(l);
+        }
+        cardLabels.clear();
+
+        // reset preferred size after clearing
+        setPreferredSize(new Dimension(0, getPreferredSize().height));
         revalidate();
         repaint();
     }
@@ -56,10 +79,63 @@ public class CardTray extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        Dimension d = super.getPreferredSize();
-        int minHeight = GUICards.CARD_HEIGHT + MIN_HEIGHT_PAD;
-        d.height = Math.max(d.height, minHeight);
-        return d;
+        // Base preferred size is driven by number of cards and overlap amount
+        int count = cardLabels.size();
+        int overlap = getOverlapX();
+        int width = 0;
+        if (count > 0) {
+            width = overlap * (count - 1) + GUICards.CARD_WIDTH + 24; // padding
+        }
+        int height = GUICards.CARD_HEIGHT + MIN_HEIGHT_PAD;
+        // ensure a sensible minimum width so the tray is visible when empty
+        return new Dimension(Math.max(width, GUICards.CARD_WIDTH + 24), height);
+    }
+
+    // Amount of horizontal shift between successive cards (smaller = more overlap)
+    private int getOverlapX() {
+        // Make overlap a smaller fraction of card width so cards sit more on top of each other
+        // Use a small fixed minimum to avoid completely covering cards
+        return Math.max(8, GUICards.CARD_WIDTH / 8);
+    }
+
+    // Position all child components (card labels) with overlap and center vertically
+    private void layoutCards() {
+        int count = cardLabels.size();
+        int overlap = getOverlapX();
+
+        // inner width of stacked cards (without outer padding)
+        int innerWidth = 0;
+        if (count > 0) {
+            innerWidth = overlap * (count - 1) + GUICards.CARD_WIDTH;
+        }
+
+        int prefWidth = innerWidth + 24; // include some padding
+        int prefHeight = GUICards.CARD_HEIGHT + MIN_HEIGHT_PAD;
+        setPreferredSize(new Dimension(prefWidth, prefHeight));
+
+        // center the stack inside this component's current width
+        int containerWidth = getWidth() > 0 ? getWidth() : prefWidth;
+        int startX = Math.max(12, (containerWidth - innerWidth) / 2);
+        int y = (prefHeight - GUICards.CARD_HEIGHT) / 2;
+
+        // Position cards left-to-right based on insertion order (older -> left)
+        for (int i = 0; i < count; i++) {
+            JLabel c = cardLabels.get(i);
+            int x = startX + i * overlap;
+            c.setBounds(x, y, GUICards.CARD_WIDTH, GUICards.CARD_HEIGHT);
+        }
+
+        // Ensure newest card (last in cardLabels) is on top by setting z-order
+        // setComponentZOrder(comp, 0) makes that component be painted last (on top)
+        for (int i = 0; i < count; i++) {
+            JLabel c = cardLabels.get(i);
+            // we want the last element to have z-order 0
+            int z = count - 1 - i;
+            setComponentZOrder(c, z);
+        }
+
+        revalidate();
+        repaint();
     }
 
     public JScrollPane inScrollPane() {

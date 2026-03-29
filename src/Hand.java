@@ -6,10 +6,11 @@ public class Hand extends CardCollection{
         super();
     }
 
-    public Hand(List<Card> h1, List<Card> h2, Set<Hand> h3){
+    public Hand(List<Card> h1, List<Card> h2, Map<String, Hand> h3){
         getCards().addAll(h1);
         getCards().addAll(h2);
-        for (Hand h : h3){
+
+        for (Hand h : h3.values()){
             getCards().addAll(h.getCards());
         }
     }
